@@ -3,7 +3,7 @@ class UserController{
     constructor(formId, tableId){
 
         this.formEl = document.getElementById(formId);
-        this.tbleEL = document.getElementById(tableId);
+        this.tableEl = document.getElementById(tableId);
         this.onSubmit();
     }
 
@@ -25,7 +25,8 @@ class UserController{
         let user = {};
 
         // verificando campos
-        this.formEl.elements.forEach(function(field, index){
+        // colchetes = spread
+        [...this.formEl.elements].forEach(function(field, index){
 
             if(field.name == "gender"){
 
