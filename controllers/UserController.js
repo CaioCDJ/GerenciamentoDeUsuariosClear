@@ -50,7 +50,7 @@ class UserController{
                         <td>${Utils.dateFormat(result._register)}</td>
                         <td>
                             <button type="button" class="btn btn-primary btn-xs btn-edit btn-flat">Editar</button>
-                            <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
+                            <button type="button" class="btn btn-danger btn-xs btn-delete btn-flat">Excluir</button>
                         </td>
                     `;
                     this.addEventsTr(tr);
@@ -71,6 +71,16 @@ class UserController{
     }
 
     addEventsTr(tr){
+        
+        // deletar conta
+        tr.querySelector(".btn-delete").addEventListener('click',e=>{
+            if (confirm("Deseja realmente excluir a conta?")) {
+                tr.remove();
+                this.updateCount();
+            }
+        });
+
+        // edicao de contas
         tr.querySelector(".btn-edit").addEventListener('click',e=>{
             
             let json = JSON.parse(tr.dataset.user);
@@ -226,7 +236,7 @@ class UserController{
             <td>${Utils.dateFormat(dataUser.register)}</td>
             <td>
                 <button type="button" class="btn btn-primary btn-xs btn-edit btn-flat">Editar</button>
-                <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
+                <button type="button" class="btn btn-danger btn-xs btn-delete btn-flat">Excluir</button>
             </td>
         `;
         this.addEventsTr(tr);
