@@ -7,6 +7,7 @@ class UserController{
         this.tableEl = document.getElementById(tableId);
         this.onSubmit();
         this.onEdit();
+        this.selectAll();
     }
 
     onEdit(){
@@ -142,11 +143,16 @@ class UserController{
             
                     values.photo = content;
             
+                    this.insert(values);
+
                     this.addLine(values); 
             
                     this.formEl.reset();
+                    
                     btn.disabled = false;
-                },()=>{
+
+                },
+                (e)=>{
                     // erros
                     console.error(e)
             });
@@ -221,12 +227,48 @@ class UserController{
             user.password, user.photo, user.admin);
         
     }
+
+    getUsersStorage(){
+        let users = [];
+        
+        if(sessionStorage.getItem('users')){
+            users = JSON.parse(sessionStorage.getItem("users"));
+        }
+        return users;
+    }
+
+    selectAll(){
+        let users = this.getUsersStorage();
+        console.log(this.getUsersStorage());
+        users.forEach(dataUser=>{
+            let user = new User();
+
+            user.loadFromJson(dataUser);
+            console.log(user);
+            this.addLine(user);
+        })
+    }
+
+    insert(data){
+        
+        let users = this.getUsersStorage();
+        
+        
+        // colocar o json dentro de um array para poder salva-lo
+        users.push(data);
+
+        // nao salva objetos Json
+        sessionStorage.setItem('users',JSON.stringify(users));
+
+    }
+  
     // adiciona um novo usuario na tabela
     addLine(dataUser) {
 
         let tr = document.createElement('tr');
+        
+        
         tr.dataset.user = JSON.stringify(dataUser);
-
         tr.innerHTML = ` 
          
             <td><img src="${dataUser.photo}" alt="User Image" class="img-circle img-sm"></td>
