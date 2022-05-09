@@ -8,6 +8,7 @@ class UserController{
         this.onSubmit();
         this.onEdit();
         this.selectAll();
+        this.updateCount();
     }
 
     onEdit(){
@@ -67,7 +68,12 @@ class UserController{
         
         // deletar conta
         tr.querySelector(".btn-delete").addEventListener('click',e=>{
+            
             if (confirm("Deseja realmente excluir a conta?")) {
+            
+                let user = new User();
+                user.loadFromJson(JSON.parse(tr.dataset.user));
+                user.remove();
                 tr.remove();
                 this.updateCount();
             }
@@ -136,7 +142,7 @@ class UserController{
                     values.photo = content;
             
                     values.save();
-
+                    console.log(values);
                     this.addLine(values); 
             
                     this.formEl.reset();
@@ -230,13 +236,12 @@ class UserController{
     }
 
     selectAll(){
-        let users = this.getUsersStorage();
-        console.log(this.getUsersStorage());
+        let users = User.getUsersStorage();
+
         users.forEach(dataUser=>{
             let user = new User();
 
             user.loadFromJson(dataUser);
-            console.log(user);
             this.addLine(user);
         })
     }
