@@ -2,6 +2,7 @@ class User{
 
     constructor(name, gender,birth, country, email, password, photo, admin){
         // underline = 'privada'
+        this._id;
         this._name = name;
         this._gender = gender;
         this._birth = birth;
@@ -14,6 +15,10 @@ class User{
     }
 
     // getters and setters
+
+    get id(){
+        return this._id;
+    }
 
     get register(){
         return this._register;
@@ -94,5 +99,51 @@ class User{
 
                 }
         }
+    }
+
+    getNewID(){
+        
+        if(!window.id) window.id =0;
+
+        id++;
+
+        return id;
+
+    }
+
+    static getUsersStorage(){
+        let users = [];
+        
+        if(localStorage.getItem('users')){
+            users = JSON.parse(localStorage.getItem("users"));
+        }
+        return users;
+    }
+
+    save(){
+         
+        let users = User.getUsersStorage(); 
+        
+        
+       if(this.id > 0){
+       
+            users.map(u=>{
+                if(u.id === this.id){
+                    u = this;
+                }
+                return u;
+            });
+ 
+        } else {
+           
+            this._id = this.getNewID();
+            // colocar o json dentro de um array para poder salva-lo
+            users.push(this);
+       }
+        
+
+        // nao salva objetos Json
+        //sessionStorage.setItem('users',JSON.stringify(users));
+        localStorage.setItem('users',JSON.stringify(users));
     }
 }
